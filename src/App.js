@@ -5,7 +5,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { DataProvider } from "./contexts/DataContext"; // Impor DataProvider
+import { DataProvider } from "./contexts/DataContext";
+import { UserProvider } from "./contexts/UserContexts";
 
 import Home from "./pages/Home";
 import ProductDetails from "./pages/ProductDetails";
@@ -18,47 +19,40 @@ import DataPelanggan from "./components/DataPelanggan";
 
 const App = () => {
   return (
-    <DataProvider>
-      {" "}
-      {/* Bungkus aplikasi dengan DataProvider */}
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/home"
-            element={
-              <>
-                <Header />
-                <Home />
-                <Sidebar />
-                <Footer />
-              </>
-            }
-          />
-          <Route
-            path="/product/:id"
-            element={
-              <>
-                <Header />
-                <ProductDetails />
-                <Sidebar />
-                <Footer />
-              </>
-            }
-          />
-          <Route
-            path="/datapelanggan"
-            element={
-              <>
-                <DataPelanggan />
-              </>
-            }
-          />
-        </Routes>
-      </Router>
-    </DataProvider>
+    <UserProvider>
+      <DataProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/home"
+              element={
+                <>
+                  <Header />
+                  <Home />
+                  <Sidebar />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/product/:id"
+              element={
+                <>
+                  <Header />
+                  <ProductDetails />
+                  <Sidebar />
+                  <Footer />
+                </>
+              }
+            />
+            <Route path="/datapelanggan" element={<DataPelanggan />} />
+          </Routes>
+        </Router>
+      </DataProvider>
+    </UserProvider>
   );
 };
 

@@ -1,32 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts/UserContexts";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleLogin = (e) => {
+  const { login } = useContext(UserContext);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Proses login
-    console.log("Logging in with", { email, password });
+    setError(null); // Reset error sebelum mencoba login
+
+    // Validasi input
+    if (!username || !password) {
+      setError("Username dan password harus diisi!");
+      return;
+    }
+
+    try {
+      // Panggil fungsi login dari context
+      await login(username, password);
+      console.log("Login berhasil!");
+    } catch (err) {
+      console.error("Login error:", err.message);
+      setError("Login failed. Please check your credentials.");
+    }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-medium text-gray-700"
             >
-              Email
+              Username
             </label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
